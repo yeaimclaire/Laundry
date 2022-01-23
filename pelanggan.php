@@ -15,60 +15,55 @@
     include "navbar.php";
     ?>
     <br><br>
-    <div class="container">
-        <div class="card">
-            <div class="card-header" style="background-color: #D3DEDC;">
-    <h1 class= "text-center text-white">Data Pelanggan</h1>
-        <form action="pelanggan.php" method="POST" class="d-flex">
-        <input class="form-control me-2" type="search" name="cari" placeholder="Search" aria-label="Search">
-            <button class="btn text-white" style="background-color: #92A9BD;" type="submit">Search</button>
-        </form>
-            </div>
-            <div class="card-body">
-        <table class="table table-striped text-white" style="background-color: #7C99AC;">
-    <thead>
-        <tr>
-            <th scope="col">ID Pelanggan</th>
-            <th scope="col">Nama Pelanggan</th>
-            <th scope="col">Alamat</th>
-            <th scope="col">Gender</th>
-            <th scope="col">No Telpon</th>
-            <th scope="col">Aksi</th>
-        </tr>
-  </thead>
-  <tbody>
-      <?php
-      include "koneksi.php";
-      if (isset($_POST["cari"])) {
-          //jika ada keyword pencarian
-          $cari = $_POST['cari'];
-          $qry_member = mysqli_query($koneksi, "select * from member where id_member='$cari' or nama like'%$cari%'");
-      }
-      else {
-      $qry_member=mysqli_query($koneksi,"select * from member");
-      }
-
-      while($data_member=mysqli_fetch_array($qry_member)){
-      ?>
-        <tr>
-            <td><?php echo $data_member["id_member"]; ?></td>
-            <td><?php echo $data_member["nama"]; ?></td>
-            <td><?php echo $data_member["alamat"]; ?></td>
-            <td><?php echo $data_member["jenis_kelamin"]; ?></td>
-            <td><?php echo $data_member["tlp"]; ?></td>
-            <td><a href="ubah_pelanggan.php?id_member=<?=$data_member['id_member']?>" class="btn"style="background-color: #D3DEDC;"><img class="bi d-block mx-auto mb-1" src="stuff/editing.png" width="15" height="15"></a>
-            <a href="hapus_pelanggan.php?id_member=<?=$data_member['id_member']?>"
-            onclick="return confirm('Apakah anda yakin menghapus data ini?')" class="btn btn-danger"><img class="bi d-block mx-auto mb-1" src="stuff/trash.png" width="15" height="15"></a></td>
-        </tr>
-    <?php
-    }
-    ?>
-  </tbody>
-</table>
-    <td><a href="tambah_pelanggan.php" class="btn text-white" style="background-color: #92A9BD;">Tambah Pelanggan</a></td>
-    </div>
-        </div>
-    </div>
+    <section class="home-section">
+                <div class="text">Member Detail</div>
+                <div class="col-11 py-3 justify-content-end text-end">
+                    <a href="add_member.php"><div class="btn btn-primary">
+                        <div class="d-inline-flex align-items-center">
+                            <i class="fas fa-cart-plus"></i>
+                            <div class="ps-2">
+                                Tambah
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+                <div class="home-content table">
+                    <div class="col-11 position-relative start-50 translate-middle-x">
+                        <table class="table table-hover table-striped table-bordered striped text-center">
+                            <thead>
+                                <tr class="table-top text-white">
+                                    <th>No</th>
+                                    <th>Nama Member</th>
+                                    <th>Alamat</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php include "koneksi.php"; 
+                                    $qry_product=mysqli_query($koneksi,"select * from member");
+                                    $no=0;
+                                    while($data_product=mysqli_fetch_array($qry_product)){
+                                    $no++;
+                                ?>
+                                <tr>
+                                <tr>
+                                    <td><?=$no?></td>
+                                    <td><?=$data_product['nama']?></td>
+                                    <td><?=$data_product['alamat']?></td>
+                                    <td><?=$data_product['jenis_kelamin']?></td>
+                                    <td class="align-middle">
+                                        <a href="tambah_transaksi.php?id=<?=$data_product['id_member']?>" class="btn btn-success"><i class="fas fa-edit pe-2"></i>AKSI</a> | 
+                                        <a href="hapus_pelanggan.php?id=<?=$data_product['id_member']?>" onclick="return confirm('Apakah anda yakin menghapus data ini?')" class="btn btn-danger"><i class="fas fa-trash-alt pe-2"></i>Hapus</a>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
     <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
 </body>

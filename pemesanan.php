@@ -26,48 +26,39 @@
             </div>
             <div class="card-body">
         <table class="table table-striped text-white" style="background-color: #7C99AC;">
-    <thead>
-        <tr>
-            <th scope="col">ID Member</th>
-            <th scope="col">Nama Member</th>
-            <th scope="col">ID Paket</th>
-            <th scope="col">Jenis</th>
-            <th scope="col">Jumlah</th>
-            <th scope="col">Proses Pengerjaan</th>
-            <th scope="col">Harga</th>
-            <th scope="col">Aksi</th>
-        </tr>
-  </thead>
-  <tbody>
-      <?php
-      include "koneksi.php";
-      if (isset($_POST["cari"])) {
-          //jika ada keyword pencarian
-          $cari = $_POST['cari'];
-          $qry_pemesanan = mysqli_query($koneksi, "select * from member where id_member='$cari' or nama like'%$cari%'");
-      }
-      else {
-      $qry_pemesanan=mysqli_query($koneksi,"select * from member");
-      }
-
-      while($data_pemesanan=mysqli_fetch_array($qry_pemesanan)){
-      ?>
-        <tr>
-            <td><?php echo $data_pemesanan["id_member"]; ?></td>
-            <td><?php echo $data_pemesanan["nama"]; ?></td>
-            <td><?php echo $data_pemesanan["id_paket"]; ?></td>
-            <td><?php echo $data_pemesanan["jenis"]; ?></td>
-            <td><?php echo $data_pemesanan["qty"]; ?></td>
-            <td><?php echo $data_pemesanan["proses"]; ?></td>
-            <td><?php echo $data_pemesanan["qty * harga"]; ?></td>
-            <td><a href="ubah_pemesanan.php?id_member=<?=$data_pemesanan['id_member']?>" class="btn"style="background-color: #D3DEDC;"><img class="bi d-block mx-auto mb-1" src="stuff/editing.png" width="15" height="15"></a>
-            <a href="hapus_pemesanan.php?id_member=<?=$data_pemesanan['id_member']?>"
-            onclick="return confirm('Apakah anda yakin menghapus data ini?')" class="btn btn-danger"><img class="bi d-block mx-auto mb-1" src="stuff/trash.png" width="15" height="15"></a></td>
-        </tr>
-    <?php
-    }
-    ?>
-  </tbody>
+        <thead>
+                                <tr class="table-top text-white">
+                                    <th>No</th>
+                                    <th>Nama Member</th>
+                                    <th>Status</th>
+                                    <th>Pembayaran</th>
+                                    <th>Batas Waktu</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php include "koneksi.php"; 
+                                    $qry_laundry=mysqli_query($conn,"select * from transaksi");
+                                    $no=0;
+                                    while($data_laundry=mysqli_fetch_array($qry_laundry)){
+                                    $qry_member=mysqli_query($conn,"select * from member where id=('".$data_laundry['id_member']."')");
+                                    $data_member=mysqli_fetch_array($qry_member);
+                                    $no++;
+                                ?>
+                                <tr>
+                                <tr>
+                                    <td><?=$no?></td>
+                                    <td><?=$data_member['nama']?></td>
+                                    <td><?=$data_laundry['status']?></td>
+                                    <td><?=$data_laundry['dibayar']?></td>
+                                    <td><?=$data_laundry['batas_waktu']?></td>
+                                    <td class="align-middle">
+                                        <a href="edit_laundry.php?id=<?=$data_laundry['id']?>" class="btn btn-success"><i class="fas fa-edit pe-2"></i>EDIT</a> | 
+                                        <a href="../model/delate_laundry.php?id=<?=$data_laundry['id']?>" onclick="return confirm('Apakah anda yakin menghapus data ini?')" class="btn btn-danger"><i class="fas fa-trash-alt pe-2"></i>Hapus</a>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
 </table>
     <td><a href="tambah_pemesanan.php" class="btn text-white" style="background-color: #92A9BD;">Tambah Pemesanan</a></td>
     <td><a href="checkout.php" class="btn text-white" style="background-color: #92A9BD;">Proses</a></td>
